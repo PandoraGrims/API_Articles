@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block link %}
+    <li class="nav-item">
+        <a href="{% url "webapp:article_update_view" article.pk %}" class="nav-link">Редактирование</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url "webapp:article_delete_view" article.pk %}" class="nav-link">Удаление</a>
+    </li>
+    <li class="nav-item">
+        <a href="{% url "webapp:comment_add" article.pk %}" class="nav-link">Оставить комментарий</a>
+    </li>
+{% endblock %}
+
+{% block content %}
+    <div class="card-body">
+        <h5 class="card-title">{{ article.title }}</h5>
+        <h6 class="card-subtitle mb-2 text-body-secondary">{{ article.author.username }}</h6>
+        <p class="card-text">{{ article.content }}</p>
+        <p class="card-text">дата изменения: {{ article.updated_at }}</p>
+    </div>
+
+    <h2>Коментарии</h2>
+    {% for comment in comments %}
+        <div>
+            <h6>{{ comment.author.username }}</h6>
+            <p>{{ comment.text }}</p>
+        </div>
+        <div class="btn-group" role="group">
+            <a href="{% url "webapp:comment_update" comment.pk %}"
+               class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
+            <a href="{% url "webapp:comment_delete" comment.pk %}" class="btn btn-primary"><i
+                    class="bi bi-trash3"></i></a>
+        </div>
+    {% endfor %}
+
+    <h2>Теги</h2>
+    <p>
+        {% for tag in article.tags.all %}
+            {{ tag.name }}
+            {% if not forloop.last %},
+            {% else %} .
+            {% endif %}
+        {% endfor %}
+    </p>
+{% endblock %}
